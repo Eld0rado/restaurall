@@ -6,6 +6,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implémentations de l'interface RestaurantDao
+ * Création des méthodes et traitements sql
+ */
 public class RestaurantDaoImpl implements RestaurantDao {
     private DaoFactory daoFactory;
 
@@ -13,41 +17,50 @@ public class RestaurantDaoImpl implements RestaurantDao {
         this.daoFactory = daoFactory;
     }
 
+    /**
+     * Insertion d'un nouveau resto en dbb
+     *
+     * @param resto
+     * @throws DaoException
+     */
     @Override
     public void ajouter(Restaurant resto) throws DaoException {
         Connection connexion = null;
         PreparedStatement preparedStatement = null;
+        try {
+            connexion = daoFactory.getConnexion();
+            preparedStatement = connexion.prepareStatement("INSERT INTO restaurant (nom, adresse, cp, ville, type) VALUES (?, ?, ?, ?, ?)");
+            preparedStatement.setString(1, resto.getNom());
+            preparedStatement.setString(2, resto.getAdresse());
+            preparedStatement.setInt(3, resto.getCp());
+            preparedStatement.setString(4, resto.getVille());
+            preparedStatement.setString(5, resto.getType());
+            preparedStatement.executeUpdate();
+            connexion.commit();
+        } catch (SQLException throwables) {
             try {
-                connexion = daoFactory.getConnexion();
-                preparedStatement = connexion.prepareStatement("INSERT INTO restaurant (nom, adresse, cp, ville, type) VALUES (?, ?, ?, ?, ?)");
-                preparedStatement.setString(1, resto.getNom());
-                preparedStatement.setString(2, resto.getAdresse());
-                preparedStatement.setInt(3, resto.getCp());
-                preparedStatement.setString(4, resto.getVille());
-                preparedStatement.setString(5, resto.getType());
-                preparedStatement.executeUpdate();
-                connexion.commit();
-            } catch (SQLException throwables) {
-                try {
-                    if (connexion != null){
-                        connexion.rollback();
-                    }
-                } catch (SQLException e) {
+                if (connexion != null) {
+                    connexion.rollback();
                 }
+            } catch (SQLException e) {
+            }
+            throw new DaoException("Communication avec la base de données impossible");
+        } finally {
+            try {
+                if (connexion != null) {
+                    connexion.close();
+                }
+            } catch (SQLException throwables) {
                 throw new DaoException("Communication avec la base de données impossible");
             }
-            finally {
-                try {
-                    if (connexion != null){
-                        connexion.close();
-                    }
-                } catch (SQLException throwables) {
-                    throw new DaoException("Communication avec la base de données impossible");
-                }
-            }
+        }
 
     }
 
+    /**
+     * @return Liste des restaurants en dbb
+     * @throws DaoException
+     */
     @Override
     public List<Restaurant> lister() throws DaoException {
         List<Restaurant> restos = new ArrayList<Restaurant>();
@@ -69,16 +82,15 @@ public class RestaurantDaoImpl implements RestaurantDao {
             }
         } catch (SQLException throwables) {
             try {
-                if (connexion != null){
-                     connexion.rollback();
+                if (connexion != null) {
+                    connexion.rollback();
                 }
             } catch (SQLException e) {
             }
             throw new DaoException("Communication avec la base de données impossible");
-        }
-        finally {
+        } finally {
             try {
-                if (connexion != null){
+                if (connexion != null) {
                     connexion.close();
                 }
             } catch (SQLException throwables) {
@@ -88,8 +100,13 @@ public class RestaurantDaoImpl implements RestaurantDao {
         return restos;
     }
 
+    /**
+     * @param nom
+     * @return Restaurant chercher par son nom
+     * @throws DaoException
+     */
     public Restaurant getRestoByNom(String nom) throws DaoException {
-        String qry = "SELECT * FROM restaurant WHERE nom ='"+nom+"'";
+        String qry = "SELECT * FROM restaurant WHERE nom ='" + nom + "'";
         Restaurant restaurant = new Restaurant();
 
         Connection connexion = null;
@@ -113,7 +130,7 @@ public class RestaurantDaoImpl implements RestaurantDao {
             throwables.printStackTrace();
         } finally {
             try {
-                if (connexion != null){
+                if (connexion != null) {
                     connexion.close();
                 }
             } catch (SQLException throwables) {
@@ -124,9 +141,14 @@ public class RestaurantDaoImpl implements RestaurantDao {
         return restaurant;
     }
 
+    /**
+     * @param id
+     * @return Restaurant cherché par son Id
+     * @throws DaoException
+     */
     @Override
     public Restaurant getRestoById(int id) throws DaoException {
-        String qry = "SELECT * FROM restaurant WHERE id ='"+id+"'";
+        String qry = "SELECT * FROM restaurant WHERE id ='" + id + "'";
         Restaurant restaurant = new Restaurant();
 
         Connection connexion = null;
@@ -150,7 +172,7 @@ public class RestaurantDaoImpl implements RestaurantDao {
             throw new DaoException("Communication avec la base de données impossible");
         } finally {
             try {
-                if (connexion != null){
+                if (connexion != null) {
                     connexion.close();
                 }
             } catch (SQLException throwables) {
@@ -161,9 +183,16 @@ public class RestaurantDaoImpl implements RestaurantDao {
         return restaurant;
     }
 
+    /**
+     * Mise à jour des champs d'un resto
+     *
+     * @param resto
+     * @param id
+     * @throws DaoException
+     */
     @Override
     public void updateResto(Restaurant resto, int id) throws DaoException {
-        String qry = "UPDATE restaurant set nom= ?, adresse= ?, cp= ?, ville= ?, type= ? WHERE id = '"+id+"'";
+        String qry = "UPDATE restaurant set nom= ?, adresse= ?, cp= ?, ville= ?, type= ? WHERE id = '" + id + "'";
         Connection connexion = null;
         PreparedStatement preparedStatement = null;
         try {
@@ -178,16 +207,15 @@ public class RestaurantDaoImpl implements RestaurantDao {
             connexion.commit();
         } catch (SQLException throwables) {
             try {
-                if (connexion != null){
+                if (connexion != null) {
                     connexion.rollback();
                 }
             } catch (SQLException e) {
             }
             throw new DaoException("Communication avec la base de données impossible");
-        }
-        finally {
+        } finally {
             try {
-                if (connexion != null){
+                if (connexion != null) {
                     connexion.close();
                 }
             } catch (SQLException throwables) {
@@ -196,11 +224,16 @@ public class RestaurantDaoImpl implements RestaurantDao {
         }
     }
 
+    /**
+     * @param type
+     * @return Liste des restaurants par type
+     * @throws DaoException
+     */
     @Override
     public List<Restaurant> getRestosByType(String type) throws DaoException {
-        String qry = "select * from restaurant where type = '"+type+"'";
+        String qry = "select * from restaurant where type = '" + type + "'";
         List<Restaurant> restos = new ArrayList<Restaurant>();
-        Connection connexion =  null;
+        Connection connexion = null;
         Statement statement = null;
         ResultSet result = null;
 
@@ -209,14 +242,14 @@ public class RestaurantDaoImpl implements RestaurantDao {
             statement = connexion.createStatement();
             result = statement.executeQuery(qry);
 
-        while (result.next()) {
-            int id = result.getInt("id");
-            String nom = result.getString("nom");
-            String adresse = result.getString("adresse");
-            int cp = result.getInt("cp");
-            String ville = result.getString("ville");
-            restos.add(new Restaurant( id, nom, adresse, cp, ville, type));
-        }
+            while (result.next()) {
+                int id = result.getInt("id");
+                String nom = result.getString("nom");
+                String adresse = result.getString("adresse");
+                int cp = result.getInt("cp");
+                String ville = result.getString("ville");
+                restos.add(new Restaurant(id, nom, adresse, cp, ville, type));
+            }
         } catch (SQLException throwables) {
             throw new DaoException("Communication avec la base de données impossible");
         } finally {

@@ -2,8 +2,9 @@
 
 <!DOCTYPE html>
 <html>
+<!-- interface de départ -->
 <head>
-    <link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel="stylesheet" type="text/css" href="style.css"/>
 
     <title>Start</title>
 </head>
@@ -15,11 +16,9 @@
         <p style="margin: auto; color: white; font-size: xx-large; font-weight: bold;">
             AnnuaiResto
         </p>
+        <p class="tcenter">Veuillez cliquer</p>
     </div>
 </a>
-<c:set var="show" value="resto" scope="request"/>
-
-<c:out value="${ show }"/>
 
 </body>
 </html>

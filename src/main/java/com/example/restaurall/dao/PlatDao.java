@@ -4,10 +4,17 @@ import com.example.restaurall.beans.Plat;
 
 import java.util.List;
 
+/**
+ * interface DAO concernant le traitement des plats
+ */
 public interface PlatDao {
     List<Plat> lister(int idReto) throws DaoException;
+
     void ajouter(Plat plat, int idResto) throws DaoException;
+
     void update(Plat plat) throws DaoException;
+
     Plat getPlatById(int id) throws DaoException;
+
     void delete(int id) throws DaoException;
 }

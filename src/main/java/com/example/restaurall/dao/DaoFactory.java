@@ -4,16 +4,22 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * Récccupéraion de la connexion
+ * couche pattern DAO pour faire le lien entre la couche métier et la couche persistante
+ * URL JDBC A CHANGER
+ */
 public class DaoFactory {
 
     private static String DRIVER = "org.sqlite.JDBC";
     private static String URL = "jdbc:sqlite:D:/_projet_sys/restaurall/restall.db";
+//    private static String URL = "jdbc:sqlite:"path"/restaurall/restall.db";
 
     DaoFactory(String url) {
         this.URL = URL;
     }
 
-    public static DaoFactory getInstance(){
+    public static DaoFactory getInstance() {
         try {
             Class.forName(DRIVER);
         } catch (ClassNotFoundException e) {
@@ -29,14 +35,11 @@ public class DaoFactory {
         return connexion;
     }
 
-    public RestaurantDao getRestaurantDao(){
+    public RestaurantDao getRestaurantDao() {
         return new RestaurantDaoImpl(this);
     }
 
     public PlatDao getPlatDao() {
         return new PlatDaoImpl(this);
-    }
-    public CategDao getCategDao() {
-        return new CategDaoImpl(this);
     }
 }

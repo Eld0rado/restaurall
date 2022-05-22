@@ -9,6 +9,9 @@ import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
 
+/**
+ * Servlet pour la Suppression d'un plat
+ */
 @WebServlet(name = "DeletePlat", value = "/DeletePlat")
 public class DeletePlat extends HttpServlet {
 
@@ -22,6 +25,14 @@ public class DeletePlat extends HttpServlet {
         DaoFactory daoFactory = DaoFactory.getInstance();
         this.platDao = daoFactory.getPlatDao();
     }
+
+    /**
+     * affichage du plat réccupérer avec son ID pour la suppression
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //réccupère l'id de du plat
@@ -38,12 +49,21 @@ public class DeletePlat extends HttpServlet {
 
     }
 
+    /**
+     * reccupération de l'ID à l'envoie du formulaire pour supprimer le plat
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             request.setAttribute("plat", platDao.getPlatById(Integer.parseInt(request.getParameter("id"))));
+            request.setAttribute("success", "Suppression effectuée");
 
             platDao.delete(Integer.parseInt(request.getParameter("id")));
+
         } catch (DaoException e) {
             request.setAttribute("erreur", e.getMessage());
         }

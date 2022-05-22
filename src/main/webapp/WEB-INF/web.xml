@@ -9,10 +9,7 @@
         <include-prelude>/WEB-INF/taglib.jsp</include-prelude>
     </jsp-property-group>
 </jsp-config>
-    <servlet-mapping>
-        <servlet-name>helloServlet</servlet-name>
-        <url-pattern>/resources/*</url-pattern>
-    </servlet-mapping>
+
     <servlet-mapping>
         <servlet-name>default</servlet-name>
         <url-pattern>*.css</url-pattern>

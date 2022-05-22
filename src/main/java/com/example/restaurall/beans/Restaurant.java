@@ -2,6 +2,9 @@ package com.example.restaurall.beans;
 
 import java.io.Serializable;
 
+/**
+ * Class modele des Restaurants
+ */
 public class Restaurant implements Serializable {
     private static final long serialVersionUID = 2151293318286497112L;
 
@@ -86,8 +89,8 @@ public class Restaurant implements Serializable {
         return "Restaurant{" +
                 "id=" + id +
                 ", nom='" + nom + '\'' +
-                ", adresse='" + adresse +" " +
-                cp + " "+ ville + '\'' +
+                ", adresse='" + adresse + " " +
+                cp + " " + ville + '\'' +
                 ", type='" + type + '\'' +
                 '}';
     }

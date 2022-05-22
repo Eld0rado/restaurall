@@ -11,7 +11,8 @@ body{
     min-height: 150px;
 }
 
-.all {
+
+.all{
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;

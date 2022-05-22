@@ -2,6 +2,9 @@ package com.example.restaurall.beans;
 
 import java.io.Serializable;
 
+/**
+ * Class modele des Plats
+ */
 public class Plat implements Serializable {
     private static final long serialVersionUID = -4862910225147703502L;
 
@@ -11,8 +14,10 @@ public class Plat implements Serializable {
     private double prix;
 
     private String type;
+
     public Plat() {
     }
+
     public Plat(int idPlat, int idResto, String nom, double prix) {
         this.idPlat = idPlat;
         this.idResto = idResto;
