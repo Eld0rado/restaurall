@@ -9,6 +9,7 @@ mvn clean install
 ```
 
 Depuis IntelliJ, ouvrez le projet et configurer ajouter votre configuration Tomcat
+![tomcat_conf](https://user-images.githubusercontent.com/91850497/169719573-9053d6e8-3fc1-429f-ad27-da8127352898.png)
 
 Dans le package dao > modifier l'URL dans la DaoFactory
 
